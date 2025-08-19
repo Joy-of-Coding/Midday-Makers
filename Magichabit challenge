@@ -1,0 +1,62 @@
+import json
+import os
+
+DAYS = [
+    "Meditate for 5 minutes",
+    "Read 5 pages of a book",
+    "Take a 10-minute walk",
+    "Write down 3 things you're grateful for",
+    "Try a new healthy recipe",
+    "Organize your workspace",
+    "Reflect on your week"
+]
+
+BADGES = [
+    "Starter: Completed Day 1!",
+    "Momentum: Completed 3 days!",
+    "Consistency: Completed 5 days!",
+    "Champion: Completed all 7 days!"
+]
+
+PROGRESS_FILE = "progress.json"
+
+def load_progress():
+    if os.path.exists(PROGRESS_FILE):
+        with open(PROGRESS_FILE, "r") as f:
+            return json.load(f)
+    return {"completed": []}
+
+def save_progress(progress):
+    with open(PROGRESS_FILE, "w") as f:
+        json.dump(progress, f)
+
+def award_badge(days_done):
+    if days_done == 1:
+        print(f"🏅 {BADGES[0]}")
+    elif days_done == 3:
+        print(f"🏅 {BADGES[1]}")
+    elif days_done == 5:
+        print(f"🏅 {BADGES[2]}")
+    elif days_done == 7:
+        print(f"🏅 {BADGES[3]}")
+
+def main():
+    progress = load_progress()
+    completed = progress["completed"]
+
+    for i, task in enumerate(DAYS, 1):
+        if i in completed:
+            print(f"Day {i}: {task} - ✅ Completed")
+            continue
+        input(f"Day {i}: {task} - Press Enter when done.")
+        completed.append(i)
+        save_progress({"completed": completed})
+        print(f"Great job finishing Day {i}!\n")
+        award_badge(len(completed))
+
+    if len(completed) == 7:
+        print("🎉 Congrats! You completed your week of small improvements.")
+
+if __name__ == "__main__":
+    main()
+    

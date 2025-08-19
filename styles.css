@@ -1,0 +1,30 @@
+/*
+GLOBAL STYLES
+
+What this file is for
+- Colors, fonts, layout, shared classes used by multiple components.
+
+How to update
+- Group styles with clear comments, e.g.:
+  /* Habit Picker */   /* Today Panel */   /* Tower */   /* Badges */   /* Reminders */
+- Keep good contrast and visible focus outlines (accessibility).
+- Prefer class names over targeting HTML tags.
+
+Avoid
+- Deleting teammates’ styles. Add or extend instead.
+*/
+
+
+
+:root{--bg:#0b0d10;--fg:#e7ecf3;--muted:#9fb0c3;--card:#12161b;--accent:#6ae3ff}
+[data-theme="light"]{--bg:#f6f7fb;--fg:#0f141a;--muted:#4c5b6a;--card:#ffffff;--accent:#0066ee}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial}
+.app-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #20242b}
+.container{display:grid;gap:16px;padding:16px;grid-template-columns:1fr}
+@media (min-width:900px){.container{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--card);border:1px solid #1e242b;border-radius:14px;padding:14px;min-height:60px}
+.btn{background:transparent;border:1px solid #2b3440;color:var(--fg);padding:8px 10px;border-radius:10px;cursor:pointer}
+.btn:focus{outline:3px solid var(--accent);outline-offset:2px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}

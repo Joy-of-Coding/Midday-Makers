@@ -1,0 +1,46 @@
+name: CI (syntax & JSON checks)
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate JSON with jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+          set -e
+          mapfile -t FILES < <(git ls-files '*.json' | grep -v 'node_modules' || true)
+          if [ "${#FILES[@]}" -gt 0 ]; then
+            for f in "${FILES[@]}"; do
+              echo "Checking $f"
+              jq -e . "$f" > /dev/null
+            done
+          else
+            echo "No JSON files found."
+          fi
+
+      - name: JS syntax check
+        run: |
+          set -e
+          mapfile -t JSFILES < <(git ls-files '*.js' | grep -v 'node_modules' || true)
+          if [ "${#JSFILES[@]}" -gt 0 ]; then
+            for f in "${JSFILES[@]}"; do
+              echo "Syntax checking $f"
+              node --check "$f"
+            done
+          else
+            echo "No JS files found."
+          fi
