@@ -14,6 +14,7 @@ Avoid
 */
 
 import { getTodayHabits, getTodayStatus, toggleToday, getStreak } from '../utilities/state.js';
+import { downloadTodayHabitsIcs } from '../utilities/ics.js';
 
 export const TodayPanel = {
   mount() {
@@ -69,6 +70,7 @@ export const TodayPanel = {
     });
 
     renderSummary();
+    addExportButton(habits, new Date());
   }
 };
 
@@ -90,4 +92,28 @@ function renderSummary() {
   const total = habits.length;
   const summary = document.getElementById('summary');
   if (summary) summary.textContent = `Done: ${done} / ${total}`;
+}
+
+// Add an export button to the panel to generate ICS file
+function addExportButton(habits, date) {
+  // Create the button element
+  const exportBtn = document.createElement('button');
+  exportBtn.textContent = 'Export to Calendar';
+  exportBtn.className = 'btn export-btn';
+  exportBtn.id = 'exportIcsBtn';
+
+  // Add click handler to generate and download the .ics file
+  exportBtn.onclick = () => {
+    downloadTodayHabitsIcs({
+      title: `Habit Tracker - ${date.toISOString().slice(0, 10)}`,
+      habits,
+      date
+    });
+  };
+
+  // Append the button to the today panel (adjust selector as needed)
+  const panel = document.getElementById('todayPanel');
+  if (panel) {
+    panel.appendChild(exportBtn);
+  }
 }
