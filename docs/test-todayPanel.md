@@ -11,4 +11,4 @@
 9. Use the Tab key to navigate to each habit control.
 10. Use Space or Enter to toggle a habit's done/undone state via keyboard.
 11. Confirm visible focus indicators appear on habit controls
-12. If streak/XP isn’t merged yet, note them as “to be tested later.”
+12. If streak/XP isn’t merged yet, note them as “to be tested later."
