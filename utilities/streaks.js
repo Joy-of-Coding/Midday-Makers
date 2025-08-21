@@ -45,11 +45,9 @@ export function bestStreak(history) {
     } else {
       current = 0;
     }
-
-    maxStreak = Math.max(maxStreak, currentStreak);
-    prevDate = date;
-  }
-  return maxStreak;
+  });
+  
+  return best;
 }
 
 /*
