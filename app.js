@@ -203,12 +203,15 @@ function renderBadges() {
   const badgesSection = document.getElementById('badges');
   if (!badgesSection) return;
   
+  const currentStreak = getCurrentStreak();
+  const completedCount = completedHabits.size;
+  
   const badges = [
-    { id: 'first-habit', name: 'First Step', icon: '🎯', description: 'Complete your first habit' },
-    { id: 'three-habits', name: 'Triple Threat', icon: '🔥', description: 'Complete 3 habits' },
-    { id: 'all-habits', name: 'Habit Master', icon: '👑', description: 'Complete all 9 habits' },
-    { id: 'streak-3', name: 'Consistent', icon: '📈', description: '3-day streak' },
-    { id: 'streak-7', name: 'Week Warrior', icon: '🏆', description: '7-day streak' }
+    { id: 'first-habit', name: 'First Step', icon: '🎯', description: 'Complete your first habit', type: 'count', current: completedCount, required: 1 },
+    { id: 'three-habits', name: 'Triple Threat', icon: '🔥', description: 'Complete 3 habits', type: 'count', current: completedCount, required: 3 },
+    { id: 'all-habits', name: 'Habit Master', icon: '👑', description: 'Complete all 9 habits', type: 'count', current: completedCount, required: 9 },
+    { id: 'streak-3', name: 'Consistent', icon: '📈', description: '3-day streak', type: 'streak', current: currentStreak, required: 3 },
+    { id: 'streak-7', name: 'Week Warrior', icon: '🏆', description: '7-day streak', type: 'streak', current: currentStreak, required: 7 }
   ];
   
   badgesSection.innerHTML = `
@@ -216,12 +219,16 @@ function renderBadges() {
     <div class="badges-grid">
       ${badges.map(badge => {
         const isUnlocked = isBadgeUnlocked(badge.id);
+        const progressText = badge.type === 'streak' 
+          ? `${badge.current}/${badge.required} days`
+          : `${badge.current}/${badge.required} habits`;
+        
         return `
           <div class="badge-card ${isUnlocked ? 'unlocked' : 'locked'}">
             <div class="badge-icon">${badge.icon}</div>
             <div class="badge-label">${badge.name}</div>
             <div class="badge-description">${badge.description}</div>
-            <div class="badge-status">${isUnlocked ? '✅ Unlocked' : '🔒 Locked'}</div>
+            <div class="badge-progress">${progressText}</div>
           </div>
         `;
       }).join('')}
@@ -270,6 +277,9 @@ function isBadgeUnlocked(badgeId) {
 document.addEventListener("DOMContentLoaded", async () => {
   console.log('🎯 DOM Content Loaded');
   
+  // Show loading page initially
+  showLoadingPage();
+  
   try {
     // Initialize XP system
     loadXP();
@@ -298,6 +308,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         setTimeout(() => {
           setupHabitListeners();
           renderBadges(); // Render badges after habits are set up
+          
+          // Hide loading page and show main app (extended time for better UX)
+          setTimeout(() => {
+            hideLoadingPage();
+          }, 8000); // Increased from 1500ms to 8000ms for much slower viewing
         }, 100);
       })
       .catch(err => {
@@ -341,6 +356,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         setTimeout(() => {
           setupHabitListeners();
           renderBadges(); // Render badges after habits are set up
+          
+          // Hide loading page and show main app (extended time for better UX)
+          setTimeout(() => {
+            hideLoadingPage();
+          }, 8000); // Increased from 1500ms to 8000ms for much slower viewing
         }, 100);
       });
 
@@ -359,8 +379,54 @@ document.addEventListener("DOMContentLoaded", async () => {
     
   } catch (error) {
     console.error('❌ App initialization failed:', error);
+    // Show error message on loading page
+    showLoadingError(error);
   }
 });
+
+// Loading page functions
+function showLoadingPage() {
+  const loadingPage = document.getElementById('loading-page');
+  const mainApp = document.getElementById('main-app');
+  
+  if (loadingPage) loadingPage.style.display = 'flex';
+  if (mainApp) mainApp.style.display = 'none';
+}
+
+function hideLoadingPage() {
+  const loadingPage = document.getElementById('loading-page');
+  const mainApp = document.getElementById('main-app');
+  
+  if (loadingPage) {
+    loadingPage.style.opacity = '0';
+    loadingPage.style.transform = 'scale(0.95)';
+    loadingPage.style.transition = 'all 0.5s ease';
+    
+    setTimeout(() => {
+      loadingPage.style.display = 'none';
+      if (mainApp) mainApp.style.display = 'block';
+      
+      // Fade in main app
+      mainApp.style.opacity = '0';
+      mainApp.style.transform = 'translateY(20px)';
+      mainApp.style.transition = 'all 0.5s ease';
+      
+      requestAnimationFrame(() => {
+        mainApp.style.opacity = '1';
+        mainApp.style.transform = 'translateY(0)';
+      });
+    }, 500);
+  }
+}
+
+function showLoadingError(error) {
+  const loadingText = document.querySelector('.loading-text');
+  if (loadingText) {
+    loadingText.textContent = 'Something went wrong. Please refresh the page.';
+    loadingText.style.color = '#ff6b6b';
+  }
+  console.error('Loading error:', error);
+}
 
 // Set up habit click listeners
 function setupHabitListeners() {
