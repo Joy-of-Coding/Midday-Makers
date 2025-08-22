@@ -46,6 +46,7 @@ export function bestStreak(history) {
       current = 0;
     }
   });
+
   return best;
 }
 
