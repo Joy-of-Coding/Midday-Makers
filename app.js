@@ -302,6 +302,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       })
       .catch(err => {
         console.error("❌ Error loading categories:", err);
+        showNotification('⚠️ Failed to load habits. Using fallback data.');
         // Use fallback categories if fetch fails
         const fallbackCategories = [
           {
