@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Micro-Habit Stacker - Offline</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    .offline-container {
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 16px;
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .offline-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+    
+    h1 {
+      margin: 0 0 1rem 0;
+      font-size: 2rem;
+    }
+    
+    p {
+      margin: 0 0 1.5rem 0;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+    
+    .retry-btn {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .retry-btn:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+    }
+    
+    .offline-features {
+      margin: 2rem 0;
+      text-align: left;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-container">
+    <div class="offline-icon">📱</div>
+    <h1>You're Offline</h1>
+    <p>Micro-Habit Stacker needs an internet connection to load. Don't worry, your progress is saved locally!</p>
+    
+    <div class="offline-features">
+      <div class="feature-item">✅ Your habits and XP are saved</div>
+      <div class="feature-item">✅ Daily progress is tracked</div>
+      <div class="feature-item">✅ Badges and streaks are preserved</div>
+    </div>
+    
+    <button class="retry-btn" onclick="location.reload()">🔄 Try Again</button>
+    
+    <p style="margin-top: 1.5rem; font-size: 0.9rem; opacity: 0.7;">
+      Check your internet connection and try refreshing the page.
+    </p>
+  </div>
+  
+  <script>
+    // Auto-retry when connection is restored
+    window.addEventListener('online', () => {
+      location.reload();
+    });
+    
+    // Show connection status
+    if (navigator.onLine) {
+      document.querySelector('.offline-container').innerHTML = `
+        <div class="offline-icon">🔄</div>
+        <h1>Reconnecting...</h1>
+        <p>Your connection is back! Reloading the app...</p>
+      `;
+      setTimeout(() => location.reload(), 2000);
+    }
+  </script>
+</body>
+</html>
