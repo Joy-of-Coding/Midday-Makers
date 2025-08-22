@@ -2,6 +2,20 @@
 // app.js
 console.log('🚀 App.js loading...');
 
+// Optional: Import streak utilities for better organization
+let StreakUtils = null;
+try {
+  // Try to import streak utilities
+  import('./utilities/streaks.js').then(module => {
+    StreakUtils = module;
+    console.log('📦 Streak utilities loaded:', StreakUtils);
+  }).catch(error => {
+    console.warn('⚠️ Streak utilities not available, using built-in functions:', error);
+  });
+} catch (error) {
+  console.warn('⚠️ Streak utilities import failed, using built-in functions:', error);
+}
+
 // Feature detection and polyfills
 function checkBrowserSupport() {
   const issues = [];
@@ -321,7 +335,13 @@ function saveCompletedHabits() {
 // Get current streak with error handling
 function getCurrentStreak() {
   try {
-    console.log('🔄 getCurrentStreak() called');
+    // Use utility function if available, otherwise use built-in
+    if (StreakUtils && StreakUtils.getCurrentStreak) {
+      return StreakUtils.getCurrentStreak();
+    }
+    
+    // Built-in fallback
+    console.log('🔄 getCurrentStreak() called (built-in)');
     const streak = storage.getItem('currentStreak') || 0;
     const result = parseInt(streak) || 0;
     console.log('📈 Current streak from storage:', streak, 'Parsed as:', result);
@@ -345,7 +365,13 @@ function hasCompletedHabitsToday() {
 // Update streak with error handling
 function updateStreak() {
   try {
-    console.log('🔄 updateStreak() called');
+    // Use utility function if available, otherwise use built-in
+    if (StreakUtils && StreakUtils.updateStreak) {
+      return StreakUtils.updateStreak();
+    }
+    
+    // Built-in fallback
+    console.log('🔄 updateStreak() called (built-in)');
     const today = new Date().toDateString();
     const lastStreakUpdate = storage.getItem('lastStreakUpdate');
     
@@ -373,9 +399,16 @@ function updateStreak() {
 // Reset streak for new day
 function resetDailyStreak() {
   try {
+    // Use utility function if available, otherwise use built-in
+    if (StreakUtils && StreakUtils.resetDailyStreak) {
+      StreakUtils.resetDailyStreak();
+      return;
+    }
+    
+    // Built-in fallback
     storage.setItem('currentStreak', '0');
     storage.removeItem('lastStreakUpdate');
-    console.log('🔄 Daily streak reset to 0');
+    console.log('🔄 Daily streak reset to 0 (built-in)');
   } catch (error) {
     console.warn('Failed to reset daily streak:', error);
   }
@@ -449,10 +482,14 @@ function isBadgeUnlocked(badgeId) {
         result = completedCount >= 9;
         break;
       case 'streak-3':
-        result = currentStreak >= 3;
-        break;
       case 'streak-7':
-        result = currentStreak >= 7;
+        // Use utility function if available for streak badges
+        if (StreakUtils && StreakUtils.isStreakBadgeUnlocked) {
+          result = StreakUtils.isStreakBadgeUnlocked(badgeId, currentStreak);
+        } else {
+          // Built-in fallback
+          result = badgeId === 'streak-3' ? currentStreak >= 3 : currentStreak >= 7;
+        }
         break;
       default:
         result = false;
