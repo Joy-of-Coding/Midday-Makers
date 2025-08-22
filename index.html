@@ -1,15 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Micro-Habit Stacker</title>
-
   <link rel="stylesheet" href="styles.css?v=7" />
 </head>
 <body>
-  <div class="app">
+  <!-- Loading Page -->
+  <div id="loading-page" class="loading-page">
+    <div class="loading-content">
+      <div class="loading-logo">🎯</div>
+      <h1 class="loading-title">Micro-Habit Stacker</h1>
+      <p class="loading-subtitle">help people build better habits with small daily actions</p>
+      
+      <div class="loading-mission">
+        <h2 class="mission-title">Transform Your Life with 2-Minute Habits</h2>
+        <p class="mission-text">Big changes start with small actions. We make habit-building simple, fun, and sustainable.</p>
+      </div>
+      
+      <div class="loading-features">
+        <div class="feature-item">
+          <span class="feature-icon">⚡</span>
+          <span class="feature-text">2-Minute Micro-Habits</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🏆</span>
+          <span class="feature-text">XP & Achievement Badges</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">📈</span>
+          <span class="feature-text">Daily Streaks & Progress</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🔄</span>
+          <span class="feature-text">Fresh Start Every Day</span>
+        </div>
+      </div>
+      
+      <div class="loading-benefits">
+        <div class="benefit-item">
+          <span class="benefit-icon">💡</span>
+          <span class="benefit-text">Simple + Fun to Use</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">📱</span>
+          <span class="benefit-text">Works on Desktop & Mobile</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">🔒</span>
+          <span class="benefit-text">No Account Needed - Private & Easy</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">🎁</span>
+          <span class="benefit-text">Instant Rewards (XP + Badges)</span>
+        </div>
+      </div>
+      
+      <div class="loading-progress">
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <p class="loading-text">Preparing your habit journey...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App (hidden initially) -->
+  <div id="main-app" class="app" style="display: none;">
     <header>
       <h1>Micro-Habit Stacker</h1>
       <div class="xp-tracker">

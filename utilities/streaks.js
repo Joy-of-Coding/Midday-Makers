@@ -48,6 +48,7 @@ export function bestStreak(history) {
   });
 
   return best;
+
 }
 
 /*
@@ -61,14 +62,19 @@ const history = {
   "2025-08-19": true,
   "2025-08-21": true // future
 };
-console.log(calculateCurrentStreak(history)); // Expected. 2 (if today is 2025-08-20)
+console.log(calculateCurrentStreak(history)); // Expected: 2 (if today is 2025-08-20)
 console.log(bestStreak(history)); // Expected: 3
 */
 
-/* Export removed to avoid syntax errors */
-
-// Also make functions available globally for non-module scripts
+// Make functions available globally for non-module scripts
 if (typeof window !== 'undefined') {
-  window.Streaks = { calculateCurrentStreak, bestStreak };
+  window.Streaks = { 
+    calculateCurrentStreak, 
+    bestStreak, 
+    getCurrentStreak, 
+    updateStreak, 
+    resetDailyStreak,
+    isStreakBadgeUnlocked
+  };
 }
 
