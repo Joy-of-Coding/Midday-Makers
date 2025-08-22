@@ -361,7 +361,48 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error('❌ App initialization failed:', error);
   }
 });
+// In app.js
+import { downloadTodayHabitsIcs } from './utilities/ics.js';
 
+// Add this after your existing code
+function setupExportButton() {
+  const exportBtn = document.getElementById('exportBtn');
+  if (!exportBtn) return;
+
+  exportBtn.onclick = () => {
+    // Get today's date
+    const today = new Date();
+    
+    // Get selected habits (you'll need to replace this with your actual habit data)
+    const selectedHabits = getSelectedHabits(); // You need to implement this
+    
+    // Generate and download the ICS file
+    downloadTodayHabitsIcs({
+      title: `Habit Tracker - ${today.toISOString().slice(0, 10)}`,
+      habits: selectedHabits,
+      date: today
+    });
+  };
+}
+
+// Helper function to get selected habits (implement based on your app structure)
+// Replace the getSelectedHabits function in app.js with this:
+function getSelectedHabits() {
+  // Get all active habit buttons (the ones that are completed/selected)
+  const activeHabitButtons = document.querySelectorAll('.habit-btn.active');
+  
+  // Extract the habit names from the button text
+  return Array.from(activeHabitButtons).map(btn => {
+    // Get the text content and clean it up (remove extra whitespace)
+    return btn.textContent.trim();
+  });
+}
+// Call setup after DOM is ready
+window.addEventListener('DOMContentLoaded', () => {
+  // Your existing initialization code...
+  
+  setupExportButton();
+});
 // Set up habit click listeners
 function setupHabitListeners() {
   const habitButtons = document.querySelectorAll('.habit-btn');
