@@ -20,6 +20,12 @@ Rules
  * @param {Date} opts.date - JS Date object for today
  */
 export function downloadTodayHabitsIcs({ title, habits, date }) {
+  // Check if any habits are selected before generating the file
+  if (!habits || habits.length === 0) {
+    alert('No Habits Selected');
+    return; // Exit early if no habits
+  }
+
   // Helper to pad month/day with leading zero (e.g. 8 -> "08")
   const pad = n => String(n).padStart(2, '0');
 
