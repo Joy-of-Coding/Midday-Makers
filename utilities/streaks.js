@@ -48,78 +48,7 @@ export function bestStreak(history) {
   });
 
   return best;
-}
 
-/**
- * Get current streak from localStorage (compatible with app.js implementation)
- * @returns {number} Current streak count
- */
-export function getCurrentStreak() {
-  try {
-    if (typeof Storage !== 'undefined') {
-      const streak = localStorage.getItem('currentStreak') || 0;
-      return parseInt(streak) || 0;
-    }
-  } catch (error) {
-    console.warn('localStorage not available for streak:', error);
-  }
-  return 0;
-}
-
-/**
- * Update streak - only increment if habits were completed today
- * @returns {number} Updated streak count
- */
-export function updateStreak() {
-  try {
-    const today = new Date().toDateString();
-    const lastStreakUpdate = localStorage.getItem('lastStreakUpdate');
-    
-    // Only update streak once per day
-    if (lastStreakUpdate !== today) {
-      const currentStreak = getCurrentStreak();
-      const newStreak = currentStreak + 1;
-      localStorage.setItem('currentStreak', newStreak.toString());
-      localStorage.setItem('lastStreakUpdate', today);
-      return newStreak;
-    } else {
-      return getCurrentStreak();
-    }
-  } catch (error) {
-    console.warn('Failed to update streak:', error);
-    return 0;
-  }
-}
-
-/**
- * Reset streak for new day
- */
-export function resetDailyStreak() {
-  try {
-    if (typeof Storage !== 'undefined') {
-      localStorage.setItem('currentStreak', '0');
-      localStorage.removeItem('lastStreakUpdate');
-    }
-  } catch (error) {
-    console.warn('Failed to reset daily streak:', error);
-  }
-}
-
-/**
- * Check if a streak-based badge should be unlocked
- * @param {string} badgeId - Badge identifier
- * @param {number} currentStreak - Current streak count
- * @returns {boolean} Whether badge is unlocked
- */
-export function isStreakBadgeUnlocked(badgeId, currentStreak) {
-  switch (badgeId) {
-    case 'streak-3':
-      return currentStreak >= 3;
-    case 'streak-7':
-      return currentStreak >= 7;
-    default:
-      return false;
-  }
 }
 
 /*
