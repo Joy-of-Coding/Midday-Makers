@@ -1,4 +1,7 @@
 
+// In app.js, add this import
+//import './components/towerView.js';
+import { renderTowerView } from './components/towerView.js';
 // app.js
 console.log('🚀 App.js loading...');
 
@@ -442,4 +445,5 @@ function setupHabitListeners() {
     });
   });
 }
+
 

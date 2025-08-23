@@ -325,3 +325,38 @@ body.dark .habit-btn.active {
     grid-template-areas: "tower";
   }
 }
+
+
+/* Center the tower view section */
+#towerView {
+  text-align: center;
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 600px;
+}
+
+#towerView h3 {
+  margin-bottom: 16px;
+}
+
+/* Center the export section */
+.export-section {
+  text-align: center;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.export-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.export-btn:hover {
+  background: #45a049;
+}

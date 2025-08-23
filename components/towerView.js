@@ -17,6 +17,8 @@ Steps
 Avoid
 - Fetching or saving data here; just read from State and render.
 */
+export { renderTowerView };
+
 // Get last 7 UTC date keys (YYYY-MM-DD)
 function getLast7Days() {
   const days = [];
@@ -33,53 +35,99 @@ function getLast7Days() {
 }
 
 // Map each date to boolean (filled if any habit done)
+// If date doesn't exist in history, treat as false
 function mapDaysToCompletion(history) {
   const last7 = getLast7Days();
-  return last7.map(date =>
-    history[date] && Object.values(history[date]).some(Boolean)
-  );
+  return last7.map(date => {
+    // If date doesn't exist in history, return false
+    if (!history || !history[date]) {
+      return false;
+    }
+    // Check if any habit was completed on this date
+    return Object.values(history[date]).some(Boolean);
+  });
 }
 
-// Render colored squares for each day (now using CSS Grid)
-function renderTowerView(history) {
-  const completions = mapDaysToCompletion(history);
-  const el = document.getElementById('towerView');
+// // Map each date to boolean (filled if any habit done)
+// function mapDaysToCompletion(history) {
+//   const last7 = getLast7Days();
+//   return last7.map(date =>
+//     history[date] && Object.values(history[date]).some(Boolean)
+//   );
+// }
 
-  el.innerHTML = `
-    <div class="tower-grid">
-      ${completions.map(done => 
-        `<div class="tower-day ${done ? 'completed' : 'not-completed'}"></div>`
-      ).join('')}
-    </div>
-    <div class="legend">
-      <span class="legend-item">
-        <span class="legend-swatch completed"></span>
-        Done
-      </span>
-      <span class="legend-item">
-        <span class="legend-swatch not-completed"></span>
-        Not Done
-      </span>
-    </div>
-  `;
-}
+// // Render colored squares for each day (now using CSS Grid)
+// function renderTowerView(history) {
+//   const completions = mapDaysToCompletion(history);
+//   const el = document.getElementById('towerView');
 
+//   el.innerHTML = `
+//     <div class="tower-grid">
+//       ${completions.map(done => 
+//         `<div class="tower-day ${done ? 'completed' : 'not-completed'}"></div>`
+//       ).join('')}
+//     </div>
+//     <div class="legend">
+//       <span class="legend-item">
+//         <span class="legend-swatch completed"></span>
+//         Done
+//       </span>
+//       <span class="legend-item">
+//         <span class="legend-swatch not-completed"></span>
+//         Not Done
+//       </span>
+//     </div>
+//   `;
+// }
+
+// function renderTowerView(history) {
+//   const completions = mapDaysToCompletion(history);
+//   const el = document.getElementById('towerView');
+//   el.innerHTML = `
+//     <div style="display:flex;justify-content:center;align-items:center;">
+//       ${completions.map(done =>
+//         `<span style="display:inline-block;width:40px;height:40px;margin:4px;
+//           background:${done ? '#00B300' : '#005580'};border-radius:8px;"></span>`
+//       ).join('')}
+//     </div>
+//     <div style="margin-top:8px;display:flex;justify-content:center;gap:16px;font-size:14px;">
+//       <span>
+//         <span style="display:inline-block;width:16px;height:16px;background:#00B300;border-radius:4px;margin-right:4px;"></span>
+//         Done
+//       </span>
+//       <span>
+//         <span style="display:inline-block;width:16px;height:16px;background:#005580;border-radius:4px;margin-right:4px;"></span>
+//         Not Done
+//       </span>
+//     </div>
+//   `;
+// }
+
+
+// third way of trying it, basically the same (coreyk)
+// Render colored squares for each day
 function renderTowerView(history) {
-  const completions = mapDaysToCompletion(history);
+    // Handle case where history is undefined or null
+  const safeHistory = history || {};
+  
+  const completions = mapDaysToCompletion(safeHistory);
   const el = document.getElementById('towerView');
+  if (!el) return;
+  
   el.innerHTML = `
-    <div style="display:flex;justify-content:center;align-items:center;">
+    <h3>📈 Last 7 Days</h3>
+    <div style="display:flex;justify-content:center;align-items:center;gap:4px;">
       ${completions.map(done =>
-        `<span style="display:inline-block;width:40px;height:40px;margin:4px;
+        `<span style="display:inline-block;width:40px;height:40px;
           background:${done ? '#00B300' : '#005580'};border-radius:8px;"></span>`
       ).join('')}
     </div>
     <div style="margin-top:8px;display:flex;justify-content:center;gap:16px;font-size:14px;">
-      <span>
+      <span style="display:flex;align-items:center;">
         <span style="display:inline-block;width:16px;height:16px;background:#00B300;border-radius:4px;margin-right:4px;"></span>
         Done
       </span>
-      <span>
+      <span style="display:flex;align-items:center;">
         <span style="display:inline-block;width:16px;height:16px;background:#005580;border-radius:4px;margin-right:4px;"></span>
         Not Done
       </span>
@@ -98,5 +146,7 @@ const testHistory = {
 };
 
 renderTowerView(testHistory);
-// Example usage (call this whenever State.history changes):
-// renderTowerView(State.history);
+// Example usage (call this whenever State.history changes): 
+//renderTowerView(State.history);
+// Export the function so it will run after State data has been processed
+//export { renderTowerView };
